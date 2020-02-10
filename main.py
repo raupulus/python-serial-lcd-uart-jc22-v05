@@ -37,13 +37,6 @@ lcd = LCDUart(port='/dev/ttyUSB1')
 # #             Funciones           # #
 #######################################
 
-# https://www.amazon.es/M%C3%B3dulo-Pantalla-Pulgadas-%C3%A1ngulo-Colorida/dp/B0832FP3FQ
-# https://articulo.mercadolibre.com.mx/MLM-709874849-22-pulgadas-uart-lcd-tft-modulo-de-pantalla-con-pl2303-puer-_JM
-
-
-
-
-
 
 
 #ser.write(b'BPS(115200)') 
@@ -66,18 +59,38 @@ lcd.write(b"CLR(0);\r\n")
 #lcd.write(b'DCV32(0,0 ,spotpear,0);') 
 #lcd.write(b'VIEW();') 
 
-lcd.write(b'CLR(12);') 
+lcd.write(b'CLR(12);\r\n') 
 time.sleep(1)
 print('apagando')
 lcd.off()
-time.sleep(6)
+time.sleep(3)
 print('encendiendo')
-lcd.write(b'CLR(1);') 
+lcd.write(b'CLR(1);\r\n') 
 lcd.on()
+
 time.sleep(1)
+lcd.write(b'BL(255);\r\n') 
+time.sleep(1)
+lcd.write(b'BL(200);\r\n') 
+time.sleep(1)
+lcd.write(b'BL(150);\r\n') 
+time.sleep(1)
+lcd.write(b'BL(100);\r\n') 
+time.sleep(1)
+lcd.write(b'BL(50);\r\n') 
+time.sleep(1)
+lcd.write(b'BL(0);\r\n') 
 
-
-
+time.sleep(1)
+lcd.write(b'PS(10, 30, 12);\r\n') 
+lcd.write(b'PS(11, 30, 12);\r\n') 
+lcd.write(b'PS(12, 30, 12);\r\n') 
+lcd.write(b'PS(13, 30, 12);\r\n') 
+lcd.write(b'PS(14, 30, 12);\r\n') 
+lcd.write(b'PS(15, 30, 12);\r\n') 
+lcd.write(b'PS(16, 30, 12);\r\n') 
+lcd.write(b'PS(17, 30, 12);\r\n') 
+lcd.write(b'PS(18, 30, 12);\r\n') 
 
 #time.sleep(1)
 #lcd.showImage('images/debian.png')

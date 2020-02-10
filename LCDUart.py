@@ -37,8 +37,8 @@ sleep = time.sleep
 
 class LCDUart:
     orientation = 'vertical'
-    width = 128
-    height = 64
+    width = 176
+    height = 220
 
     # Variable que almacena la conexión UART con la pantalla
     ser = None
@@ -122,7 +122,7 @@ class LCDUart:
         """
         Devuelve la orientación actual de la pantalla
         """
-        return self.orientation == 'vertical' ? 'vertical' : 'horizontal'
+        return self.orientation == 'vertical' if 'vertical' else 'horizontal'
 
 
     def setScreenOrientation(self, orientation):
@@ -131,18 +131,29 @@ class LCDUart:
         horizontal y vertical
         """
         if orientation is 'vertical':
-            self.orientation = orientation    
-            self.ser.write(b"DIR(0);\r\n") 
+            self.orientation = orientation
+            self.width = 176
+            self.height = 220
+            self.ser.write(b"DIR(0);\r\n")
             time.sleep(0.1)
             return True
         elif orientation is 'horizontal':
-            self.orientation = orientation    
-            self.ser.write(b"DIR(0);\r\n") 
+            self.orientation = orientation
+            self.width = 220
+            self.height = 176
+            self.ser.write(b"DIR(1);\r\n")
             return True
 
         return False
+        
 
-    
+
+    def setBrigthness(self, value):
+        """
+        Establece el brillo al que trabajará la pantalla.
+        Los valores admitidos varían entre 0 y 255, siendo 255 la pantalla apagada.
+        """
+        self.ser.write(bytes("BL(" + str(value) + ";\r\n")) 
 
 
 
