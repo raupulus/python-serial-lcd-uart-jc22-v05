@@ -31,7 +31,7 @@ from LCDUart import LCDUart
 # #             Variables           # #
 #######################################
 sleep = time.sleep
-lcd = LCDUart()
+lcd = LCDUart(port='/dev/ttyUSB1')
 
 #######################################
 # #             Funciones           # #
@@ -60,14 +60,31 @@ lcd = LCDUart()
 
 
 lcd.write(b"RESET;\r\n") 
-time.sleep(1)
 lcd.write(b"BPS(115200);\r\n") 
-time.sleep(1)
 lcd.write(b"CLR(0);\r\n") 
+#time.sleep(1)
+#lcd.write(b'DCV32(0,0 ,spotpear,0);') 
+#lcd.write(b'VIEW();') 
+
+lcd.write(b'CLR(12);') 
 time.sleep(1)
-lcd.write(b'DCV32(0,0 ,spotpear,0);') 
+print('apagando')
+lcd.off()
+time.sleep(6)
+print('encendiendo')
+lcd.write(b'CLR(1);') 
+lcd.on()
 time.sleep(1)
-lcd.showImage('images/debian.png')
+
+
+
+
+#time.sleep(1)
+#lcd.showImage('images/debian.png')
+
+
+
+time.sleep(1)
 lcd.stop()
 
 

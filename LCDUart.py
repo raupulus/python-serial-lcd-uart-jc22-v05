@@ -79,14 +79,26 @@ class LCDUart:
         self.setOrientation = orientation
 
 
-        print('color: ' + str(self.colors.get('yellow')))
-
-
     def stop(self):
         """
-        Detiene la comunicación con la pantalla
+        Detiene la comunicación con la pantalla.
         """
         self.ser.close()
+
+
+    def on(self):
+        """
+        Enciende la pantalla.
+        """
+        self.ser.write(b"LCDON(1);\r\n") 
+
+
+    def off(self):
+        """
+        Apaga la pantalla.
+        """
+        self.ser.write(b"LCDON(0);\r\n") 
+
 
     def write(self, command):
         """
@@ -94,6 +106,7 @@ class LCDUart:
         """
         self.ser.write(bytes(command)) 
         time.sleep(0.1)
+
 
     def getScreenSize(self):
         """
@@ -109,28 +122,59 @@ class LCDUart:
         """
         Devuelve la orientación actual de la pantalla
         """
-        return self.orientation
+        return self.orientation == 'vertical' ? 'vertical' : 'horizontal'
 
 
     def setScreenOrientation(self, orientation):
         """
-        Establece un nuevo modo para la orientación de la pantalla
+        Establece un nuevo modo para la orientación de la pantalla, admite los valores
+        horizontal y vertical
         """
-        if (orientation == 'vertical') or (orientation == 'horizontal'):
+        if orientation is 'vertical':
             self.orientation = orientation    
-            return true
+            self.ser.write(b"DIR(0);\r\n") 
+            time.sleep(0.1)
+            return True
+        elif orientation is 'horizontal':
+            self.orientation = orientation    
+            self.ser.write(b"DIR(0);\r\n") 
+            return True
 
-        return false    
+        return False
+
+    
+
+
 
     def showImage(self, path):
         """
         Muestra por la pantalla la imagen recibida por su ruta conviertiéndola primero
         a binario.
         """
-        output = base64.b64encode(path)
-        bin = "".join(format(ord(x), "b") for x in base64.decodestring(output))
 
-        lcd.write(bytes("FSIMG(" + bin + ",0,0,176,220,0);\r\n"))
+        # Al parecer hay que cargar primero la imagen en la flash, no encuentro como hacerlo dinámicamente 
+        """
+
+
+        from PIL import Image
+        import io
+
+        im = Image.open(path)
+        im_resize = im.resize((176, 220))
+        buf = io.BytesIO()
+        im_resize.save(buf, format='PNG')
+        byte_im = buf.getvalue()
+
+        print(byte_im)
+
+
+        f = open("tmp/images/test.bin", "wb")
+        f.write(byte_im)
+        f.close()
+
+        
+        self.ser.write(bytes("FSIMG(" + binimg + ",0,0,176,220,0);\r\n"))
         time.sleep(0.1)
+        """
 
         
